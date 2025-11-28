@@ -1,33 +1,29 @@
 const express = require('express')
-const {adminAuth, userAuth} = require('./middlewares/auth')
 
 const {connectDB} = require('./config/database')
-const User = require('./models/user')
+const cookie_parser = require('cookie-parser')
+const authRouter = require('./routes/authRouter')
+const profileRouter = require('./routes/profileRouter')
+const requestRouter = require('./routes/requestRouter')
 
 const app = express();
-
-
 const port = 3000;
 
-app.post('/signup', async (req,res)=>{
+app.use(express.json()); // to read _id of mongodb
+app.use(cookie_parser()); // to read cookie token
 
-    const user = new User({
-        firstName : "Rohit",
-        lastName : "Sharma",
-        emailId : "rohit@gmail.com",
-        password:"rohit123",
-        age : 41,
-        gender : "Male",
-    })
 
-    try {
-        await user.save();
-        res.send("Data added to database Succesfully...");
-    } catch (error) {
-        res.status(404).send("Error while saving data to database...");
-    }
-})
 
+
+app.use('/', authRouter);
+app.use('/', profileRouter);
+app.use('/', requestRouter);
+
+
+
+
+
+// connecting database
 connectDB()
 .then(()=>{
     console.log("Database Connected Succesfully...");
