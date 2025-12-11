@@ -70,6 +70,9 @@ const userschema = new mongoose.Schema({
     timestamps : true,
 })
 
+
+userschema.index({firstName : 1, lastName : 1});
+
 userschema.methods.getJWT = async function (){
     const user = this;
 

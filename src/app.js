@@ -5,6 +5,7 @@ const cookie_parser = require('cookie-parser')
 const authRouter = require('./routes/authRouter')
 const profileRouter = require('./routes/profileRouter')
 const requestRouter = require('./routes/requestRouter')
+const userRouter = require('./routes/user')
 
 const app = express();
 const port = 3000;
@@ -18,6 +19,7 @@ app.use(cookie_parser()); // to read cookie token
 app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', requestRouter);
+app.use('/', userRouter)
 
 
 
@@ -25,12 +27,12 @@ app.use('/', requestRouter);
 
 // connecting database
 connectDB()
-.then(()=>{
-    console.log("Database Connected Succesfully...");
-})
-.catch((err) => console.log("Database connection failed..."));
-
-
-app.listen(port,()=>{
-    console.log(`Server is up on port ${port}`);
-})
+    .then(() => {
+        console.log("Database Connected Successfully...");
+        app.listen(port, () => {
+            console.log(`Server is up on port ${port}`);
+        });
+    })
+    .catch(err => {
+        console.log("Database connection failed...", err);
+    });
