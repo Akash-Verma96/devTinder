@@ -6,10 +6,15 @@ const authRouter = require('./routes/authRouter')
 const profileRouter = require('./routes/profileRouter')
 const requestRouter = require('./routes/requestRouter')
 const userRouter = require('./routes/user')
+const cors = require('cors')
 
 const app = express();
 const port = 3000;
 
+app.use(cors({
+    origin : "http://localhost:5173",
+    credentials : true
+}))
 app.use(express.json()); // to read _id of mongodb
 app.use(cookie_parser()); // to read cookie token
 
