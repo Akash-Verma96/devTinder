@@ -23,8 +23,20 @@ authRouter.post("/signup", async (req, res) => {
     });
 
     // to save data in mongodb
-    await user.save();
-    res.send("Data save to database...");
+    
+    const savedUser = await user.save();
+
+    
+      const token = await savedUser.getJWT();
+
+      res.cookie("token", token,{
+        expires: new Date(Date.now() + 8 * 3600000),
+      });
+
+      res.json({
+        message:`${user.firstName} ${user.lastName} Sign Up Successfully !`,
+        data : savedUser
+      })   
   } catch (error) {
     res.status(404).send("ERROR : " + error.message);
   }
@@ -47,8 +59,11 @@ authRouter.post("/login", async (req, res) => {
 
       const token = await user.getJWT();
 
-      res.cookie("token", token);
+      res.cookie("token", token,{
+        expires: new Date(Date.now() + 8 * 3600000),
+      });
       res.send(user);
+
     } else throw new Error("Invalid credential!");
   } catch (error) {
     res.status(400).send("ERROR : " + error.message);
