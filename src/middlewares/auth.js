@@ -9,7 +9,7 @@ const userAuth = async (req,res,next)=>{
             return res.status(401).send("Please Login !!");
         }
 
-        const decodedData = jwt.verify(token,"DevTinder$321");
+        const decodedData = jwt.verify(token,process.env.ZWT_SECRET);
 
         const {_id} = decodedData;
 
